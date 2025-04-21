@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -76,6 +77,13 @@ const Builder = () => {
     setIsSubmitting(true);
     
     try {
+      console.log('Creating build with data:', {
+        user_id: user.id,
+        bot,
+        request: userNeed.trim(),
+        status: 'In Progress'
+      });
+      
       const { data, error } = await supabase
         .from('builds')
         .insert([
@@ -88,7 +96,10 @@ const Builder = () => {
         ])
         .select();
         
-      if (error) throw error;
+      if (error) {
+        console.error('Error details:', error);
+        throw error;
+      }
       
       if (data && data.length > 0) {
         const buildId = data[0].id;
@@ -99,12 +110,14 @@ const Builder = () => {
           title: 'Build started',
           description: 'Your prompt is being generated...',
         });
+      } else {
+        throw new Error('No data returned from the server');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating build:', error);
       toast({
         title: 'Error',
-        description: 'Failed to create a new build',
+        description: `Failed to create a new build: ${error.message || 'Unknown error'}`,
         variant: 'destructive',
       });
     } finally {
@@ -160,7 +173,7 @@ const Builder = () => {
     switch (format) {
       case 'txt':
         content = selectedBuildData.map(build => 
-          `ID: ${build.id}\nBot: ${build.bot}\nRequest: ${build.request}\nStatus: ${build.status}\nCreated: ${formatDate(build.created_at)}\n\n${build.result}\n\n---\n\n`
+          `ID: ${build.id}\nBot: ${build.bot}\nRequest: ${build.request}\nStatus: ${build.status}\nCreated: ${formatDate(build.created_at)}\n\n${build.result || ''}\n\n---\n\n`
         ).join('');
         filename += '.txt';
         break;
