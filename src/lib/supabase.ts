@@ -1,16 +1,13 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-// Provide fallback values for local development
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder-url.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Use the client from our integrations folder instead
+export { supabase } from '@/integrations/supabase/client';
 
 export type Profile = {
   id: string;
-  name: string;
-  email: string;
+  name: string | null;
+  email: string | null;
   plan: string;
 };
 
@@ -20,6 +17,6 @@ export type Build = {
   bot: string;
   request: string;
   status: string;
-  result: string;
+  result: string | null;
   created_at: string;
 };
