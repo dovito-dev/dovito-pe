@@ -168,7 +168,7 @@ const Builder = () => {
       case 'csv':
         content = 'ID,Bot,Request,Status,Created At,Result\n';
         content += selectedBuildData.map(build => 
-          `"${build.id}","${build.bot}","${build.request.replace(/"/g, '""')}","${build.status}","${build.created_at}","${build.result.replace(/"/g, '""')}"`
+          `"${build.id}","${build.bot}","${build.request.replace(/"/g, '""')}","${build.status}","${build.created_at}","${build.result?.replace(/"/g, '""') || ''}"`
         ).join('\n');
         filename += '.csv';
         break;
@@ -198,20 +198,13 @@ const Builder = () => {
       <strong>Status:</strong> ${build.status}<br>
       <strong>Created:</strong> ${formatDate(build.created_at)}
     </div>
-    <div class="result">${build.result}</div>
+    <div class="result">${build.result || ''}</div>
   </div>
   `).join('')}
 </body>
 </html>`;
         filename += '.html';
         break;
-        
-      case 'pdf':
-        toast({
-          title: 'PDF export',
-          description: 'PDF export would be implemented with a library like jsPDF in a real application.',
-        });
-        return;
     }
     
     const blob = new Blob([content], { type: format === 'html' ? 'text/html' : 'text/plain' });
