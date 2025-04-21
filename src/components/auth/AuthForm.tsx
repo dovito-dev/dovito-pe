@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -6,12 +5,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
+import { Google } from 'lucide-react';
 
-const AuthForm = () => {
+interface AuthFormProps {
+  defaultTab?: string;
+}
+
+const AuthForm = ({ defaultTab = 'signin' }: AuthFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn, signUp, signInWithMagicLink, signInWithGoogle } = useAuth();
+  const { signIn, signUp, signInWithGoogle } = useAuth();
   const { toast } = useToast();
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -20,7 +24,6 @@ const AuthForm = () => {
     try {
       await signIn(email, password);
     } catch (error) {
-      // Error is handled in the AuthContext
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -33,29 +36,6 @@ const AuthForm = () => {
     try {
       await signUp(email, password);
     } catch (error) {
-      // Error is handled in the AuthContext
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleMagicLink = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) {
-      toast({
-        title: "Email required",
-        description: "Please enter your email address",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    setIsLoading(true);
-    try {
-      await signInWithMagicLink(email);
-    } catch (error) {
-      // Error is handled in the AuthContext
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -69,7 +49,7 @@ const AuthForm = () => {
         <p className="text-sm text-muted-foreground">Sign in to your account or create a new one</p>
       </div>
       
-      <Tabs defaultValue="signin" className="w-full">
+      <Tabs defaultValue={defaultTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signin">Sign In</TabsTrigger>
           <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -119,24 +99,16 @@ const AuthForm = () => {
             </div>
           </div>
           
-          <div className="flex flex-col space-y-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleMagicLink}
-              disabled={isLoading}
-            >
-              Magic Link
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={signInWithGoogle}
-              disabled={isLoading}
-            >
-              Google
-            </Button>
-          </div>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={signInWithGoogle}
+            disabled={isLoading}
+            className="w-full"
+          >
+            <Google className="mr-2 h-4 w-4" />
+            Sign in with Google
+          </Button>
         </TabsContent>
         
         <TabsContent value="signup" className="space-y-4">
@@ -169,6 +141,28 @@ const AuthForm = () => {
               disabled={isLoading}
             >
               {isLoading ? 'Creating account...' : 'Create Account'}
+            </Button>
+
+            <div className="relative mt-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-gray-700" />
+              </div>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-card px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={signInWithGoogle}
+              disabled={isLoading}
+              className="w-full"
+            >
+              <Google className="mr-2 h-4 w-4" />
+              Sign up with Google
             </Button>
             
             <p className="text-center text-xs text-muted-foreground">
