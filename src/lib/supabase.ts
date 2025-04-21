@@ -15,7 +15,7 @@ export type Build = {
   id: string;
   user_id: string;
   bot: string;
-  request: string;
+  request: string;  // This field is correctly named 'request' not 'input'
   status: string;
   result: string | null;
   created_at: string;

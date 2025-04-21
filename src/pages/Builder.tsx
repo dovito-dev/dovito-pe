@@ -84,16 +84,17 @@ const Builder = () => {
         status: 'In Progress'
       });
       
+      // Simplified build object that matches our database schema exactly
+      const buildObj = {
+        user_id: user.id,
+        bot,
+        request: userNeed.trim(),
+        status: 'In Progress'
+      };
+      
       const { data, error } = await supabase
         .from('builds')
-        .insert([
-          {
-            user_id: user.id,
-            bot,
-            request: userNeed.trim(),
-            status: 'In Progress'
-          }
-        ])
+        .insert([buildObj])
         .select();
         
       if (error) {
