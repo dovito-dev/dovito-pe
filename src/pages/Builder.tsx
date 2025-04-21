@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -77,7 +76,6 @@ const Builder = () => {
     setIsSubmitting(true);
     
     try {
-      // Initial build record with "in progress" status
       const { data, error } = await supabase
         .from('builds')
         .insert([
@@ -96,12 +94,9 @@ const Builder = () => {
       if (data && data.length > 0) {
         const buildId = data[0].id;
         
-        // Simulate build process (in a real app, this would be a backend process)
         setTimeout(async () => {
-          // Create a "result" based on the bot and user need
           const result = `## Prompt for ${bot}\n\nYou are an AI assistant specialized in ${userNeed.trim()}. Follow these guidelines:\n\n1. Listen carefully to the user's request\n2. Ask clarifying questions if needed\n3. Provide detailed, step-by-step responses\n4. Include examples and explanations\n5. Maintain a helpful and friendly tone\n\nWhen responding to queries about ${userNeed.trim()}, draw upon relevant knowledge and best practices in this field.`;
           
-          // Update the build with the result and "complete" status
           const { error: updateError } = await supabase
             .from('builds')
             .update({ status: 'Complete', result })
@@ -117,10 +112,8 @@ const Builder = () => {
             return;
           }
           
-          // Refresh the builds list
           fetchBuilds();
           
-          // Navigate to the result page
           navigate(`/result/${buildId}`);
         }, 2000);
         
@@ -235,7 +228,6 @@ const Builder = () => {
         filename += '.html';
         break;
         
-      // PDF would typically require a library like jsPDF
       case 'pdf':
         toast({
           title: 'PDF export',
@@ -244,7 +236,6 @@ const Builder = () => {
         return;
     }
     
-    // Create and trigger download
     const blob = new Blob([content], { type: format === 'html' ? 'text/html' : 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -272,8 +263,8 @@ const Builder = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="botSelect">Select AI Bot</Label>
-                <Select id="botSelect" value={bot} onValueChange={setBot}>
-                  <SelectTrigger>
+                <Select value={bot} onValueChange={setBot}>
+                  <SelectTrigger id="botSelect">
                     <SelectValue placeholder="Select a bot" />
                   </SelectTrigger>
                   <SelectContent>
