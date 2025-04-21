@@ -18,7 +18,7 @@ const Footer = () => {
             <Link to="/privacy" className="text-sm text-gray-400 hover:text-white transition-colors">
               Privacy
             </Link>
-            <a href="https://github.com/dovito" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white transition-colors">
+            <a href="https://github.com/dovito-dev/dovito-pe" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white transition-colors">
               GitHub
             </a>
           </div>

@@ -83,8 +83,7 @@ const Builder = () => {
             user_id: user.id,
             bot,
             request: userNeed.trim(),
-            status: 'In Progress',
-            result: ''
+            status: 'In Progress'
           }
         ])
         .select();
@@ -93,29 +92,8 @@ const Builder = () => {
       
       if (data && data.length > 0) {
         const buildId = data[0].id;
-        
-        setTimeout(async () => {
-          const result = `## Prompt for ${bot}\n\nYou are an AI assistant specialized in ${userNeed.trim()}. Follow these guidelines:\n\n1. Listen carefully to the user's request\n2. Ask clarifying questions if needed\n3. Provide detailed, step-by-step responses\n4. Include examples and explanations\n5. Maintain a helpful and friendly tone\n\nWhen responding to queries about ${userNeed.trim()}, draw upon relevant knowledge and best practices in this field.`;
-          
-          const { error: updateError } = await supabase
-            .from('builds')
-            .update({ status: 'Complete', result })
-            .eq('id', buildId);
-            
-          if (updateError) {
-            console.error('Error updating build:', updateError);
-            toast({
-              title: 'Error',
-              description: 'Failed to complete the build process',
-              variant: 'destructive',
-            });
-            return;
-          }
-          
-          fetchBuilds();
-          
-          navigate(`/result/${buildId}`);
-        }, 2000);
+        fetchBuilds();
+        navigate(`/result/${buildId}`);
         
         toast({
           title: 'Build started',
@@ -164,7 +142,7 @@ const Builder = () => {
     }).format(date);
   };
 
-  const exportBuilds = (format: 'txt' | 'csv' | 'pdf' | 'html') => {
+  const exportBuilds = (format: 'txt' | 'csv' | 'html') => {
     if (selectedBuilds.length === 0) {
       toast({
         title: 'No builds selected',
@@ -339,14 +317,6 @@ const Builder = () => {
                 >
                   HTML
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => exportBuilds('pdf')}
-                  disabled={selectedBuilds.length === 0}
-                >
-                  PDF
-                </Button>
               </div>
             )}
           </CardHeader>
@@ -372,13 +342,16 @@ const Builder = () => {
                       <TableHead className="hidden md:table-cell">Request</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead className="hidden md:table-cell">Created</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {builds.map((build) => (
-                      <TableRow key={build.id}>
-                        <TableCell>
+                      <TableRow
+                        key={build.id}
+                        className="cursor-pointer"
+                        onClick={() => navigate(`/result/${build.id}`)}
+                      >
+                        <TableCell onClick={(e) => e.stopPropagation()}>
                           <Checkbox
                             checked={selectedBuilds.includes(build.id)}
                             onCheckedChange={() => handleSelectBuild(build.id)}
@@ -410,15 +383,6 @@ const Builder = () => {
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                           {formatDate(build.created_at)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => navigate(`/result/${build.id}`)}
-                          >
-                            <FileDown className="h-4 w-4" />
-                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
