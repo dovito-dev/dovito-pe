@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -77,14 +76,6 @@ const Builder = () => {
     setIsSubmitting(true);
     
     try {
-      console.log('Creating build with data:', {
-        user_id: user.id,
-        bot,
-        request: userNeed.trim(),
-        status: 'In Progress'
-      });
-      
-      // Simplified build object that matches our database schema exactly
       const buildObj = {
         user_id: user.id,
         bot,
@@ -98,7 +89,6 @@ const Builder = () => {
         .select();
         
       if (error) {
-        console.error('Error details:', error);
         throw error;
       }
       
