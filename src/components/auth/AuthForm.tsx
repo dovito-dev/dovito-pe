@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
-import { Google } from 'lucide-react';
+import { GoogleIcon } from 'lucide-react';
 
 interface AuthFormProps {
   defaultTab?: string;
@@ -106,7 +106,7 @@ const AuthForm = ({ defaultTab = 'signin' }: AuthFormProps) => {
             disabled={isLoading}
             className="w-full"
           >
-            <Google className="mr-2 h-4 w-4" />
+            <GoogleIcon className="mr-2 h-4 w-4" />
             Sign in with Google
           </Button>
         </TabsContent>
@@ -161,7 +161,7 @@ const AuthForm = ({ defaultTab = 'signin' }: AuthFormProps) => {
               disabled={isLoading}
               className="w-full"
             >
-              <Google className="mr-2 h-4 w-4" />
+              <GoogleIcon className="mr-2 h-4 w-4" />
               Sign up with Google
             </Button>
             
