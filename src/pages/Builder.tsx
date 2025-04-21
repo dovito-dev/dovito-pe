@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -79,7 +80,7 @@ const Builder = () => {
       const buildObj = {
         user_id: user.id,
         bot,
-        request: userNeed.trim(),
+        request: userNeed.trim(),  // Using 'request' instead of 'input'
         status: 'In Progress'
       };
       
