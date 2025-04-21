@@ -1,9 +1,9 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import Layout from '@/components/layout/Layout';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const Home = () => {
   const { user } = useAuth();
@@ -45,54 +45,84 @@ const Home = () => {
         </div>
       </div>
       
-      <div id="features" className="py-16">
-        <h2 className="text-3xl font-bold text-center mb-12">Features</h2>
+      <div id="features" className="py-16 container">
+        <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Card className="transition-shadow hover:shadow-md">
-            <CardContent className="pt-6">
-              <h3 className="text-xl font-semibold mb-3">Multi-Bot Support</h3>
-              <p className="text-muted-foreground mb-4">
-                Create prompts for OpenAI, Claude, Google Gemini, Grok, Perplexity, and Meta Llama.
+        <div className="space-y-24">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold">Multi-Bot Support</h3>
+              <p className="text-lg text-muted-foreground">
+                Create and customize prompts for various AI models including OpenAI, Claude, 
+                Google Gemini, and more. Fine-tune your interactions with precise control over
+                temperature, tokens, and other parameters.
               </p>
-              <div className="rounded-lg bg-gray-900 p-4 text-sm">
-                <p className="text-green-400">// Example: Bot Selection</p>
-                <p className="text-gray-300">Select Bot: OpenAI GPT-4</p>
-                <p className="text-gray-300">Temperature: 0.7</p>
-                <p className="text-gray-300">Max Tokens: 2048</p>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="transition-shadow hover:shadow-md">
-            <CardContent className="pt-6">
-              <h3 className="text-xl font-semibold mb-3">Build History</h3>
-              <p className="text-muted-foreground mb-4">
-                Access all your previous prompts in one place with full export capabilities.
+              <ul className="space-y-2 text-muted-foreground">
+                <li>✓ Support for all major AI models</li>
+                <li>✓ Advanced parameter controls</li>
+                <li>✓ Model-specific optimizations</li>
+              </ul>
+            </div>
+            <Card className="overflow-hidden">
+              <AspectRatio ratio={16/9}>
+                <img 
+                  src="photo-1488590528505-98d2b5aba04b" 
+                  alt="AI Bot Interface"
+                  className="object-cover w-full h-full rounded-t-lg"
+                />
+              </AspectRatio>
+            </Card>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center md:flex-row-reverse">
+            <div className="space-y-4 md:order-2">
+              <h3 className="text-2xl font-semibold">Prompt History & Management</h3>
+              <p className="text-lg text-muted-foreground">
+                Keep track of all your prompts in one place. Access your history, 
+                organize by categories, and quickly find your most successful prompts
+                for reuse or refinement.
               </p>
-              <div className="rounded-lg bg-gray-900 p-4 text-sm">
-                <p className="text-blue-400">// Recent Builds</p>
-                <p className="text-gray-300">Marketing Copy Generator</p>
-                <p className="text-gray-300">Story Outline Creator</p>
-                <p className="text-gray-300">Code Refactoring Assistant</p>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="transition-shadow hover:shadow-md">
-            <CardContent className="pt-6">
-              <h3 className="text-xl font-semibold mb-3">Export Options</h3>
-              <p className="text-muted-foreground mb-4">
-                Download your prompts in multiple formats like TXT, CSV, PDF, and HTML.
+              <ul className="space-y-2 text-muted-foreground">
+                <li>✓ Comprehensive prompt history</li>
+                <li>✓ Smart categorization</li>
+                <li>✓ Quick search and filters</li>
+              </ul>
+            </div>
+            <Card className="overflow-hidden md:order-1">
+              <AspectRatio ratio={16/9}>
+                <img 
+                  src="photo-1461749280684-dccba630e2f6" 
+                  alt="Prompt History Interface"
+                  className="object-cover w-full h-full rounded-t-lg"
+                />
+              </AspectRatio>
+            </Card>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold">Export & Share</h3>
+              <p className="text-lg text-muted-foreground">
+                Export your prompts in multiple formats or share them directly with your team.
+                Support for TXT, CSV, PDF, and HTML formats makes it easy to integrate
+                with your existing workflows.
               </p>
-              <div className="rounded-lg bg-gray-900 p-4 text-sm">
-                <p className="text-yellow-400">// Export Formats</p>
-                <p className="text-gray-300">✓ Plain Text (.txt)</p>
-                <p className="text-gray-300">✓ Structured Data (.csv)</p>
-                <p className="text-gray-300">✓ Web Format (.html)</p>
-              </div>
-            </CardContent>
-          </Card>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>✓ Multiple export formats</li>
+                <li>✓ Team sharing capabilities</li>
+                <li>✓ Version control</li>
+              </ul>
+            </div>
+            <Card className="overflow-hidden">
+              <AspectRatio ratio={16/9}>
+                <img 
+                  src="photo-1486312338219-ce68d2c6f44d" 
+                  alt="Export Interface"
+                  className="object-cover w-full h-full rounded-t-lg"
+                />
+              </AspectRatio>
+            </Card>
+          </div>
         </div>
       </div>
       
