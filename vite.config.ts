@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   build: {
-    outDir: 'docs', // Add this line to output to /docs folder
+    outDir: 'docs', // Output to /docs folder
   },
   plugins: [
     react(),
@@ -22,5 +22,10 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  // Add history fallback for SPA routing
+  preview: {
+    port: 8080,
+    host: true
   },
 }));

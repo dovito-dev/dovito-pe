@@ -1,13 +1,16 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import Layout from '@/components/layout/Layout';
 import { Card } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+
 const Home = () => {
   const {
     user
   } = useAuth();
+  
   return <Layout>
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
@@ -52,7 +55,11 @@ const Home = () => {
             </div>
             <Card className="overflow-hidden">
               <AspectRatio ratio={16 / 9}>
-                <img src="photo-1488590528505-98d2b5aba04b" alt="AI Bot Interface" className="object-cover w-full h-full rounded-t-lg" />
+                <img 
+                  src="/lovable-uploads/ad7a9cb3-4192-4617-ba88-96936ed79935.png" 
+                  alt="AI Bot Interface" 
+                  className="object-cover w-full h-full rounded-t-lg" 
+                />
               </AspectRatio>
             </Card>
           </div>
@@ -65,7 +72,11 @@ const Home = () => {
             </div>
             <Card className="overflow-hidden md:order-1">
               <AspectRatio ratio={16 / 9}>
-                <img src="photo-1461749280684-dccba630e2f6" alt="Prompt History Interface" className="object-cover w-full h-full rounded-t-lg" />
+                <img 
+                  src="/lovable-uploads/c982a2a2-67be-4adb-aeca-9e1329bd79f7.png" 
+                  alt="Prompt History Interface" 
+                  className="object-cover w-full h-full rounded-t-lg" 
+                />
               </AspectRatio>
             </Card>
           </div>
@@ -78,7 +89,11 @@ const Home = () => {
             </div>
             <Card className="overflow-hidden">
               <AspectRatio ratio={16 / 9}>
-                <img src="photo-1486312338219-ce68d2c6f44d" alt="Export Interface" className="object-cover w-full h-full rounded-t-lg" />
+                <img 
+                  src="/lovable-uploads/915fd21c-5341-4d6b-afbd-4257f5184ead.png" 
+                  alt="Export Interface" 
+                  className="object-cover w-full h-full rounded-t-lg" 
+                />
               </AspectRatio>
             </Card>
           </div>
@@ -107,4 +122,5 @@ const Home = () => {
       </div>
     </Layout>;
 };
+
 export default Home;
