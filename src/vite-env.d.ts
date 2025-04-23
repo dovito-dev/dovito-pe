@@ -1,3 +1,4 @@
+
 /// <reference types="vite/client" />
 interface ImportMetaEnv {
     readonly VITE_SUPABASE_URL: string;
@@ -6,4 +7,13 @@ interface ImportMetaEnv {
   }
   interface ImportMeta {
     readonly env: ImportMetaEnv;
+  }
+  
+  // Add window.env global
+  interface Window {
+    env?: {
+      VITE_SUPABASE_URL: string;
+      VITE_SUPABASE_ANON_KEY: string;
+      VITE_STRIPE_PUBLISHABLE_KEY: string;
+    };
   }
