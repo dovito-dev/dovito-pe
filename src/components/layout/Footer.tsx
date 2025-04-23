@@ -12,12 +12,12 @@ const Footer = () => {
             </p>
           </div>
           <div className="flex space-x-6">
-            <Link to="/terms" className="text-sm text-gray-400 hover:text-white transition-colors">
+            <a href="https://dovito.com/legal/terms/" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white transition-colors">
               Terms
-            </Link>
-            <Link to="/privacy" className="text-sm text-gray-400 hover:text-white transition-colors">
+            </a>
+            <a href="https://dovito.com/legal/privacy/" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white transition-colors">
               Privacy
-            </Link>
+            </a>
             <a href="https://github.com/dovito-dev/dovito-pe" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white transition-colors">
               GitHub
             </a>
