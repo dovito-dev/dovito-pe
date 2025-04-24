@@ -45,18 +45,24 @@ export type Database = {
           id: string
           name: string | null
           plan: string
+          quota: number | null
+          usage: number
         }
         Insert: {
           email?: string | null
           id: string
           name?: string | null
           plan?: string
+          quota?: number | null
+          usage?: number
         }
         Update: {
           email?: string | null
           id?: string
           name?: string | null
           plan?: string
+          quota?: number | null
+          usage?: number
         }
         Relationships: []
       }
