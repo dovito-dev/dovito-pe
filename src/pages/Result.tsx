@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase, Build } from '@/lib/supabase';
@@ -118,7 +117,10 @@ const Result = () => {
   return (
     <Layout requireAuth>
       <div className="max-w-3xl mx-auto">
-        <Link to="/builder" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
+        <Link 
+          to="/builder" 
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6"
+        >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Builder
         </Link>
