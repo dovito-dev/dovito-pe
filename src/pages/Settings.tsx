@@ -1,7 +1,7 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +19,13 @@ const Settings = () => {
   const [isRequestSubmitting, setIsRequestSubmitting] = useState(false);
   const [requestSubmitted, setRequestSubmitted] = useState(false);
   const { toast } = useToast();
+
+  // Update name state when profile changes
+  useEffect(() => {
+    if (profile?.name) {
+      setName(profile.name);
+    }
+  }, [profile]);
 
   const updateProfile = async () => {
     if (!user) return;
@@ -87,7 +94,7 @@ const Settings = () => {
     }
   };
 
-  if (!user || !profile) {
+  if (!user) {
     return (
       <Layout requireAuth>
         <div className="flex items-center justify-center h-64">

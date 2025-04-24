@@ -1,6 +1,4 @@
 
-import { createClient } from '@supabase/supabase-js';
-
 // Use the client from our integrations folder instead
 export { supabase } from '@/integrations/supabase/client';
 

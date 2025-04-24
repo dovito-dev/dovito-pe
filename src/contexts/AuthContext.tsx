@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -56,18 +57,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const fetchProfile = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
 
-    if (error) {
-      console.error('Error fetching profile:', error);
-      return;
+      if (error) {
+        console.error('Error fetching profile:', error);
+        
+        // If profile doesn't exist, create it
+        if (error.code === 'PGRST116') {
+          await createProfile(userId, user?.email || null);
+        }
+        return;
+      }
+
+      setProfile(data as Profile);
+    } catch (error) {
+      console.error('Unexpected error fetching profile:', error);
     }
-
-    setProfile(data as Profile);
+  };
+  
+  const createProfile = async (userId: string, email: string | null) => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .insert([{ 
+          id: userId, 
+          email: email,
+          name: email ? email.split('@')[0] : null,
+          plan: 'free'
+        }]);
+        
+      if (error) {
+        console.error('Error creating profile:', error);
+        return;
+      }
+      
+      // Fetch the newly created profile
+      fetchProfile(userId);
+    } catch (error) {
+      console.error('Unexpected error creating profile:', error);
+    }
   };
 
   const signIn = async (email: string, password: string) => {
@@ -138,16 +171,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) throw error;
       
       if (data.user) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert([{ 
-            id: data.user.id, 
-            email: data.user.email,
-            name: email.split('@')[0],
-            plan: 'free'
-          }]);
-          
-        if (profileError) throw profileError;
+        await createProfile(data.user.id, data.user.email);
       }
       
       toast({
