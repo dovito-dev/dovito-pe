@@ -32,7 +32,7 @@ const Home = () => {
                 </Button>
               </Link>
               <Link to="/login?tab=signin">
-                <Button size="lg" variant="outline">
+                <Button size="lg" variant="outline" className="bg-slate-400 hover:bg-slate-300">
                   Login
                 </Button>
               </Link>
