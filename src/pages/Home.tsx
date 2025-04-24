@@ -52,7 +52,7 @@ const Home = () => {
             </div>
             <Card className="overflow-hidden">
               <AspectRatio ratio={16 / 9}>
-                <img src="/lovable-uploads/ad7a9cb3-4192-4617-ba88-96936ed79935.png" alt="AI Bot Interface" className="object-cover w-full h-full rounded-t-lg" />
+                <img alt="AI Bot Interface" className="object-cover w-full h-full rounded-t-lg" src="/lovable-uploads/b31d9d6a-875f-41ef-bd64-e7b355c73c15.png" />
               </AspectRatio>
             </Card>
           </div>
@@ -65,7 +65,7 @@ const Home = () => {
             </div>
             <Card className="overflow-hidden md:order-1">
               <AspectRatio ratio={16 / 9}>
-                <img src="/lovable-uploads/c982a2a2-67be-4adb-aeca-9e1329bd79f7.png" alt="Prompt History Interface" className="object-cover w-full h-full rounded-t-lg" />
+                <img alt="Prompt History Interface" className="object-cover w-full h-full rounded-t-lg" src="/lovable-uploads/255c6381-5379-4fe7-8cc1-a07c05219244.png" />
               </AspectRatio>
             </Card>
           </div>
@@ -78,7 +78,7 @@ const Home = () => {
             </div>
             <Card className="overflow-hidden">
               <AspectRatio ratio={16 / 9}>
-                <img src="/lovable-uploads/915fd21c-5341-4d6b-afbd-4257f5184ead.png" alt="Export Interface" className="object-cover w-full h-full rounded-t-lg" />
+                <img alt="Export Interface" className="object-cover w-full h-full rounded-t-lg" src="/lovable-uploads/7d4b4d3a-5f15-4071-989c-6f9de18eb7cb.png" />
               </AspectRatio>
             </Card>
           </div>
