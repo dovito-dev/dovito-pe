@@ -10,8 +10,8 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <nav className="border-b border-gray-800 py-4">
-      <div className="container mx-auto flex items-center justify-between px-4">
+    <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
+      <nav className="flex w-full max-w-3xl items-center justify-between rounded-full border border-gray-200 bg-background/80 px-6 py-3 backdrop-blur-lg shadow-lg">
         <Link to="/" className="text-xl font-bold text-dovito">
           Prompt Engineer
         </Link>
@@ -50,8 +50,8 @@ const Navbar = () => {
             </Link>
           )}
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 };
 
