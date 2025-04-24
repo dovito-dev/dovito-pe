@@ -25,7 +25,7 @@ const QuotaDisplay = () => {
     <div className="flex items-center gap-2 text-sm text-zinc-400">
       <span>{profile.usage}</span>
       <span>/</span>
-      <span>{profile.quota}</span>
+      <span>{profile.quota === null ? 'UNLIMITED' : profile.quota}</span>
     </div>
   );
 };
