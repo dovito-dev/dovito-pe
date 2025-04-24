@@ -1,17 +1,15 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Settings, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import QuotaDisplay from './QuotaDisplay';
-
 const Navbar = () => {
-  const { user } = useAuth();
-  return (
-    <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
+  const {
+    user
+  } = useAuth();
+  return <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
       <nav className="flex w-full max-w-3xl items-center justify-between rounded-full bg-zinc-900/70 px-6 py-3 backdrop-blur-lg shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3)]">
-        {user ? (
-          <>
+        {user ? <>
             <QuotaDisplay />
             <Link to="/builder" className="absolute left-1/2 -translate-x-1/2 text-xl font-bold text-dovito hover:opacity-90 transition-opacity">
               Prompt Engineer by Dovito
@@ -29,20 +27,15 @@ const Navbar = () => {
                 </Button>
               </Link>
             </div>
-          </>
-        ) : (
-          <div className="w-full flex items-center justify-center">
+          </> : <div className="w-full flex items-center justify-center">
             <Link to="/" className="text-xl font-bold text-dovito hover:opacity-90 transition-opacity">
               Prompt Engineer by Dovito
             </Link>
             <Link to="/login" className="absolute right-4">
-              <Button>Login</Button>
+              <Button className="bg-transparent">Login</Button>
             </Link>
-          </div>
-        )}
+          </div>}
       </nav>
-    </div>
-  );
+    </div>;
 };
-
 export default Navbar;
