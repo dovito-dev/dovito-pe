@@ -13,8 +13,11 @@ import { Loader2 } from 'lucide-react';
 const Settings = () => {
   const { user, profile, signOut } = useAuth();
   const [name, setName] = useState(profile?.name || '');
+  const [quotaRequestName, setQuotaRequestName] = useState('');
+  const [quotaRequestMessage, setQuotaRequestMessage] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
-  const [isUpgrading, setIsUpgrading] = useState(false);
+  const [isRequestSubmitting, setIsRequestSubmitting] = useState(false);
+  const [requestSubmitted, setRequestSubmitted] = useState(false);
   const { toast } = useToast();
 
   const updateProfile = async () => {
@@ -46,40 +49,41 @@ const Settings = () => {
     }
   };
 
-  const handlePlanChange = async () => {
-    if (!user || !profile) return;
+  const handleQuotaRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
     
-    setIsUpgrading(true);
+    if (!user) return;
+    
+    setIsRequestSubmitting(true);
     
     try {
-      // In a real implementation, this would redirect to Stripe checkout
-      // For now, we'll just toggle the plan type directly
-      
-      const newPlan = profile.plan === 'free' ? 'paid' : 'free';
-      
       const { error } = await supabase
-        .from('profiles')
-        .update({ plan: newPlan })
-        .eq('id', user.id);
-        
+        .from('usage_requests')
+        .insert({
+          user_id: user.id,
+          name: quotaRequestName,
+          message: quotaRequestMessage
+        });
+      
       if (error) throw error;
       
-      // Reload the page to refresh the profile data
-      window.location.reload();
+      setRequestSubmitted(true);
+      setQuotaRequestName('');
+      setQuotaRequestMessage('');
       
       toast({
-        title: 'Plan updated',
-        description: `Your plan has been changed to ${newPlan}.`,
+        title: 'Request Submitted',
+        description: 'Your quota increase request has been sent.',
       });
     } catch (error) {
-      console.error('Error changing plan:', error);
+      console.error('Error submitting quota request:', error);
       toast({
-        title: 'Plan change failed',
-        description: 'Failed to update your subscription plan',
+        title: 'Request Failed',
+        description: 'Failed to submit your request',
         variant: 'destructive',
       });
     } finally {
-      setIsUpgrading(false);
+      setIsRequestSubmitting(false);
     }
   };
 
@@ -148,46 +152,55 @@ const Settings = () => {
           
           <Card>
             <CardHeader>
-              <CardTitle>Subscription</CardTitle>
+              <CardTitle>Request Quota Increase</CardTitle>
               <CardDescription>
-                Manage your subscription plan
+                Ask for more daily submissions
               </CardDescription>
             </CardHeader>
             
             <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="planType">Current Plan</Label>
-                <Input
-                  id="planType"
-                  value={profile.plan === 'free' ? 'Free' : 'Paid'}
-                  disabled
-                />
-              </div>
-              
-              <Button 
-                id="upgradePlan"
-                onClick={handlePlanChange} 
-                disabled={isUpgrading}
-                variant={profile.plan === 'free' ? 'default' : 'destructive'}
-                className={profile.plan === 'free' ? 'bg-dovito hover:bg-dovito/90' : ''}
-              >
-                {isUpgrading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Processing...
-                  </>
-                ) : profile.plan === 'free' ? (
-                  'Upgrade to Paid'
-                ) : (
-                  'Downgrade to Free'
+              <form onSubmit={handleQuotaRequest} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="requestName">Name</Label>
+                  <Input
+                    id="requestName"
+                    value={quotaRequestName}
+                    onChange={(e) => setQuotaRequestName(e.target.value)}
+                    required
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="requestMessage">Message</Label>
+                  <Input
+                    id="requestMessage"
+                    value={quotaRequestMessage}
+                    onChange={(e) => setQuotaRequestMessage(e.target.value)}
+                    required
+                  />
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  disabled={isRequestSubmitting}
+                  className="w-full bg-dovito hover:bg-dovito/90"
+                >
+                  {isRequestSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    'Request Increase'
+                  )}
+                </Button>
+                
+                {requestSubmitted && (
+                  <p className="text-sm text-green-500 mt-2">
+                    Request sent. We'll review your request soon.
+                  </p>
                 )}
-              </Button>
-              
-              <p className="text-xs text-muted-foreground">
-                {profile.plan === 'free' 
-                  ? 'Upgrade to paid plan for unlimited builds and premium features.' 
-                  : 'Downgrading will limit your access to basic features only.'}
-              </p>
+              </form>
             </CardContent>
           </Card>
           
