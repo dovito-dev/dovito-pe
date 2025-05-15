@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
@@ -11,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, CreditCard, X } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import DeveloperTools from '@/components/settings/DeveloperTools';
 
 const Settings = () => {
   const { user, profile, signOut } = useAuth();
@@ -150,15 +150,19 @@ const Settings = () => {
     }
   };
 
+  // Check if we're in development environment
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
   return (
     <Layout requireAuth>
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Settings</h1>
         
         <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="grid grid-cols-2 mb-8">
+          <TabsList className="grid grid-cols-3 mb-8">
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="billing">Billing</TabsTrigger>
+            {isDevelopment && <TabsTrigger value="developer">Developer</TabsTrigger>}
           </TabsList>
           
           <TabsContent value="profile" className="space-y-8">
@@ -385,6 +389,12 @@ const Settings = () => {
               </CardContent>
             </Card>
           </TabsContent>
+          
+          {isDevelopment && (
+            <TabsContent value="developer" className="space-y-8">
+              <DeveloperTools />
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </Layout>

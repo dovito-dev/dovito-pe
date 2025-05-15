@@ -33,6 +33,8 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
   const [plan, setPlan] = useState<string | null>(null);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [isPlanActive, setIsPlanActive] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   // Get user's credits and plan when user changes
   useEffect(() => {
@@ -44,27 +46,46 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
   const refreshCredits = async () => {
     if (!user) return;
 
+    setLoading(true);
+    setError(null);
+    
     try {
       // Get user profile which contains the credits
-      const { data: profile, error } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
-        .select('credits, plan')
+        .select('credits, usage, quota, plan')
         .eq('id', user.id)
         .single();
 
       if (error) {
         console.error('Error refreshing credits:', error);
+        setError(error);
         return;
       }
       
       // Update credits state
-      if (profile) {
-        setCredits(profile.credits ?? 0);
-        setPlan(profile.plan ?? null);
-        setIsPlanActive(profile.plan === 'monthly' || profile.plan === 'annual');
+      if (data) {
+        setCredits(data.credits ?? 0);
+        setPlan(data.plan ?? null);
+        setIsPlanActive(data.plan === 'monthly' || data.plan === 'annual');
+      }
+      
+      // Add development logs
+      if (process.env.NODE_ENV === 'development') {
+        console.log("DEV: Subscription context", { 
+          loading: false, 
+          error: null, 
+          data,
+          credits: data?.credits,
+          plan: data?.plan,
+          isPlanActive: data?.plan === 'monthly' || data?.plan === 'annual'
+        });
       }
     } catch (error) {
       console.error('Error refreshing credits:', error);
+      setError(error as Error);
+    } finally {
+      setLoading(false);
     }
   };
 
