@@ -52,7 +52,10 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
         .eq('id', user.id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error refreshing credits:', error);
+        return;
+      }
       
       // Update credits state
       setCredits(profile?.credits || 0);
