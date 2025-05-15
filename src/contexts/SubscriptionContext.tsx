@@ -80,12 +80,12 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
     
     try {
       // Deduct credit
-      const { error } = await supabase
-        .from('profiles')
-        .update({ credits: credits - 1 })
-        .eq('id', user.id);
+      const { error } = await supabase.rpc('deduct_credit', { user_id: user.id });
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error deducting credit:', error);
+        return false;
+      }
       
       // Update local state
       setCredits(prev => prev - 1);

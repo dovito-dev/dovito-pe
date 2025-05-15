@@ -7,6 +7,9 @@ export type Profile = {
   name: string | null;
   email: string | null;
   plan: string;
+  credits?: number;
+  usage?: number;
+  quota?: number | null;
 };
 
 export type Build = {
