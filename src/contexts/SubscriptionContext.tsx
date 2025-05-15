@@ -59,9 +59,9 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
       
       // Update credits state
       if (profile) {
-        setCredits(profile?.credits ?? 0);
-        setPlan(profile?.plan ?? null);
-        setIsPlanActive(profile?.plan === 'monthly' || profile?.plan === 'annual');
+        setCredits(profile.credits ?? 0);
+        setPlan(profile.plan ?? null);
+        setIsPlanActive(profile.plan === 'monthly' || profile.plan === 'annual');
       }
     } catch (error) {
       console.error('Error refreshing credits:', error);

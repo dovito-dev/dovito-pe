@@ -3,12 +3,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const QuotaDisplay = () => {
   const { user } = useAuth();
   const { credits, plan } = useSubscription();
 
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading } = useQuery({
     queryKey: ['profile', user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -26,6 +27,10 @@ const QuotaDisplay = () => {
     },
     enabled: !!user,
   });
+
+  if (isLoading) {
+    return <Skeleton className="h-5 w-20" />;
+  }
 
   if (!profile) return null;
 
@@ -49,14 +54,14 @@ const QuotaDisplay = () => {
   // For free and pay-as-you-go users, show credits or usage/quota
   return (
     <div className="flex items-center gap-2 text-sm">
-      {profile && typeof profile?.credits !== 'undefined' && profile?.credits !== null ? (
-        <span>Credits: {profile?.credits}</span>
+      {profile && typeof profile.credits !== 'undefined' && profile.credits !== null ? (
+        <span>Credits: {profile.credits}</span>
       ) : (
         profile && (
           <>
-            <span>{profile?.usage || 0}</span>
+            <span>{profile.usage || 0}</span>
             <span>/</span>
-            <span>{profile?.quota === null ? 'UNLIMITED' : profile?.quota}</span>
+            <span>{profile.quota === null ? 'UNLIMITED' : profile.quota}</span>
           </>
         )
       )}
