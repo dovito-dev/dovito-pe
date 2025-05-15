@@ -49,7 +49,7 @@ const QuotaDisplay = () => {
   // For free and pay-as-you-go users, show credits or usage/quota
   return (
     <div className="flex items-center gap-2 text-sm">
-      {typeof profile.credits !== 'undefined' ? (
+      {typeof profile.credits !== 'undefined' && profile.credits !== null ? (
         <span>Credits: {profile.credits}</span>
       ) : (
         <>

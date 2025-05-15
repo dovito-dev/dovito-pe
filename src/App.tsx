@@ -14,8 +14,25 @@ import Builder from "@/pages/Builder";
 import Result from "@/pages/Result";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
+import SubscriptionModal from "@/components/subscription/SubscriptionModal";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 
 const queryClient = new QueryClient();
+
+// Modal wrapper to conditionally show subscription modal
+const ModalWrapper = ({ children }: { children: React.ReactNode }) => {
+  const { showSubscriptionModal, setShowSubscriptionModal } = useSubscription();
+  
+  return (
+    <>
+      {children}
+      <SubscriptionModal 
+        isOpen={showSubscriptionModal} 
+        onClose={() => setShowSubscriptionModal(false)} 
+      />
+    </>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -29,7 +46,11 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/builder" element={<Builder />} />
+                <Route path="/builder" element={
+                  <ModalWrapper>
+                    <Builder />
+                  </ModalWrapper>
+                } />
                 <Route path="/result/:id" element={<Result />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
