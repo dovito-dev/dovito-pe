@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { Toggle } from '@/components/ui/switch';
+import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 
 const DevAuthToggle = () => {
@@ -13,7 +13,7 @@ const DevAuthToggle = () => {
   return (
     <div className="fixed bottom-4 right-4 flex items-center gap-2 bg-gray-800 text-white p-3 rounded-lg shadow-lg z-50">
       <div className="flex items-center space-x-2">
-        <Toggle 
+        <Switch 
           id="dev-auth-toggle" 
           checked={!!user} 
           onCheckedChange={toggleDevAuth}
