@@ -58,9 +58,11 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
       }
       
       // Update credits state
-      setCredits(profile?.credits || 0);
-      setPlan(profile?.plan || null);
-      setIsPlanActive(profile?.plan === 'monthly' || profile?.plan === 'annual');
+      if (profile) {
+        setCredits(profile.credits || 0);
+        setPlan(profile.plan || null);
+        setIsPlanActive(profile.plan === 'monthly' || profile.plan === 'annual');
+      }
     } catch (error) {
       console.error('Error refreshing credits:', error);
     }
@@ -79,7 +81,7 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
     }
     
     try {
-      // Use the deduct_credit function via fetch to work around type limitations
+      // Use the deduct-credit edge function
       const { error } = await supabase.functions.invoke('deduct-credit', {
         body: { userId: user.id }
       });
