@@ -1,17 +1,19 @@
 
 import { useAuth } from '@/contexts/AuthContext';
+import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 
 const QuotaDisplay = () => {
   const { user } = useAuth();
+  const { credits, plan } = useSubscription();
 
   const { data: profile } = useQuery({
     queryKey: ['profile', user?.id],
     queryFn: async () => {
       const { data } = await supabase
         .from('profiles')
-        .select('usage, quota')
+        .select('usage, quota, credits, plan')
         .eq('id', user?.id)
         .single();
       return data;
@@ -21,11 +23,35 @@ const QuotaDisplay = () => {
 
   if (!profile) return null;
 
+  // If we have a subscription plan (monthly or annual), show that instead of credits
+  if (plan === 'monthly') {
+    return (
+      <div className="flex items-center gap-2 text-sm">
+        <span className="text-dovito font-medium">MEGA Monthly</span>
+      </div>
+    );
+  }
+  
+  if (plan === 'annual') {
+    return (
+      <div className="flex items-center gap-2 text-sm">
+        <span className="text-dovito font-medium">WHOPPING Annual</span>
+      </div>
+    );
+  }
+
+  // For free and pay-as-you-go users, show credits or usage/quota
   return (
-    <div className="flex items-center gap-2 text-sm text-zinc-400">
-      <span>{profile.usage}</span>
-      <span>/</span>
-      <span>{profile.quota === null ? 'UNLIMITED' : profile.quota}</span>
+    <div className="flex items-center gap-2 text-sm">
+      {profile.credits !== undefined ? (
+        <span>Credits: {profile.credits}</span>
+      ) : (
+        <>
+          <span>{profile.usage}</span>
+          <span>/</span>
+          <span>{profile.quota === null ? 'UNLIMITED' : profile.quota}</span>
+        </>
+      )}
     </div>
   );
 };

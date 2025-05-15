@@ -1,13 +1,23 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSubscription } from '@/contexts/SubscriptionContext';
 import { Button } from '@/components/ui/button';
 import Layout from '@/components/layout/Layout';
 import { Card } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import SubscriptionModal from '@/components/subscription/SubscriptionModal';
+import { useEffect } from 'react';
+
 const Home = () => {
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
+  const { showSubscriptionModal, setShowSubscriptionModal } = useSubscription();
+
+  // Close modal when user navigates to this page
+  useEffect(() => {
+    setShowSubscriptionModal(false);
+  }, []);
+  
   return <Layout>
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
@@ -17,7 +27,7 @@ const Home = () => {
         
         <p className="mt-6 max-w-lg text-lg text-muted-foreground">
           Prompt Engineer helps you craft effective prompts for OpenAI, Claude, 
-          Gemini, and other AI models. Build, save, and export your prompts.
+          Gemini, and Lovable. Build, save, and export your prompts.
         </p>
         
         <div className="mt-10 flex flex-col sm:flex-row gap-4">
@@ -32,7 +42,7 @@ const Home = () => {
                 </Button>
               </Link>
               <Link to="/login?tab=signin">
-                <Button size="lg" variant="outline" className="bg-slate-400 hover:bg-slate-300">
+                <Button size="lg" variant="outline" className="bg-slate-100 hover:bg-slate-200">
                   Login
                 </Button>
               </Link>
@@ -47,7 +57,7 @@ const Home = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold">Multi-Bot Support</h3>
-              <p className="text-lg text-muted-foreground">Create and customize prompts for various AI models including OpenAI, Claude, Google Gemini, and more.</p>
+              <p className="text-lg text-muted-foreground">Create and customize prompts for various AI models including OpenAI, Claude, Lovable, and Gemini.</p>
               
             </div>
             <Card className="overflow-hidden">
@@ -105,6 +115,12 @@ const Home = () => {
           </div>
         </Card>
       </div>
+
+      <SubscriptionModal 
+        isOpen={showSubscriptionModal} 
+        onClose={() => setShowSubscriptionModal(false)} 
+      />
     </Layout>;
 };
+
 export default Home;
