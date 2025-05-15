@@ -49,14 +49,16 @@ const QuotaDisplay = () => {
   // For free and pay-as-you-go users, show credits or usage/quota
   return (
     <div className="flex items-center gap-2 text-sm">
-      {typeof profile.credits !== 'undefined' && profile.credits !== null ? (
+      {profile && typeof profile.credits !== 'undefined' && profile.credits !== null ? (
         <span>Credits: {profile.credits}</span>
       ) : (
-        <>
-          <span>{profile.usage || 0}</span>
-          <span>/</span>
-          <span>{profile.quota === null ? 'UNLIMITED' : profile.quota}</span>
-        </>
+        profile && (
+          <>
+            <span>{profile.usage || 0}</span>
+            <span>/</span>
+            <span>{profile.quota === null ? 'UNLIMITED' : profile.quota}</span>
+          </>
+        )
       )}
     </div>
   );

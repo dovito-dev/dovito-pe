@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -15,46 +14,125 @@ type AuthContextType = {
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   loading: boolean;
+  // Add dev mode properties
+  isDevMode: boolean;
+  toggleDevAuth: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Check if we're in development mode
+const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isDevMode, setIsDevMode] = useState(isDevelopment);
+  // Store a mock user for development mode
+  const [mockUser, setMockUser] = useState<User | null>(null);
+  const [mockProfile, setMockProfile] = useState<Profile | null>(null);
   const { toast } = useToast();
 
+  // Create a mock user for development mode
+  const createMockUser = () => {
+    const mockUserId = 'dev-user-123';
+    const mockUserObj = {
+      id: mockUserId,
+      email: 'dev@example.com',
+      user_metadata: { name: 'Dev User' },
+      app_metadata: {},
+      aud: 'authenticated',
+      created_at: new Date().toISOString(),
+    } as User;
+    
+    const mockProfileObj = {
+      id: mockUserId,
+      email: 'dev@example.com',
+      name: 'Dev User',
+      plan: 'monthly', // Set to whatever plan you want to test
+      credits: 10,
+      usage: 5,
+      quota: 100,
+    } as Profile;
+    
+    setMockUser(mockUserObj);
+    setMockProfile(mockProfileObj);
+  };
+
+  // Initialize mock user
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+    if (isDevMode) {
+      createMockUser();
+    }
+  }, [isDevMode]);
+
+  useEffect(() => {
+    // Only set up Supabase auth listeners if not in dev mode
+    if (!isDevMode) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          setSession(session);
+          setUser(session?.user ?? null);
+          
+          if (session?.user) {
+            setTimeout(() => {
+              fetchProfile(session.user.id);
+            }, 0);
+          } else {
+            setProfile(null);
+          }
+        }
+      );
+
+      supabase.auth.getSession().then(({ data: { session } }) => {
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          setTimeout(() => {
-            fetchProfile(session.user.id);
-          }, 0);
-        } else {
-          setProfile(null);
+          fetchProfile(session.user.id);
         }
-      }
-    );
+      });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+      setLoading(false);
       
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      }
-    });
+      return () => subscription.unsubscribe();
+    }
+  }, [isDevMode]);
 
-    setLoading(false);
-    
-    return () => subscription.unsubscribe();
-  }, []);
+  // Toggle between signed in and signed out in dev mode
+  const toggleDevAuth = () => {
+    if (!isDevMode) return;
+
+    if (user) {
+      // Sign out
+      setUser(null);
+      setProfile(null);
+      setSession(null);
+      toast({
+        title: "Dev Mode",
+        description: "Signed out in development mode",
+      });
+    } else {
+      // Sign in with mock user
+      setUser(mockUser);
+      setProfile(mockProfile);
+      // Create a minimal mock session
+      setSession({
+        user: mockUser!,
+        access_token: 'mock-token',
+        refresh_token: 'mock-refresh-token',
+        expires_in: 3600,
+        expires_at: new Date().getTime() + 3600 * 1000,
+        token_type: 'bearer',
+      } as Session);
+      toast({
+        title: "Dev Mode",
+        description: "Signed in with mock user in development mode",
+      });
+    }
+  };
 
   const fetchProfile = async (userId: string) => {
     try {
@@ -220,6 +298,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signUp,
         signOut,
         loading,
+        // Add dev mode properties
+        isDevMode,
+        toggleDevAuth,
       }}
     >
       {children}

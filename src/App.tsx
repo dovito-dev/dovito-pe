@@ -16,6 +16,7 @@ import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 import SubscriptionModal from "@/components/subscription/SubscriptionModal";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import DevAuthToggle from "@/components/auth/DevAuthToggle";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ const App = () => (
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <DevAuthToggle />
             </BrowserRouter>
           </SubscriptionProvider>
         </AuthProvider>
