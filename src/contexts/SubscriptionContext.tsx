@@ -79,8 +79,10 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
     }
     
     try {
-      // Deduct credit
-      const { error } = await supabase.rpc('deduct_credit', { user_id: user.id });
+      // Use the deduct_credit function via fetch to work around type limitations
+      const { error } = await supabase.functions.invoke('deduct-credit', {
+        body: { userId: user.id }
+      });
       
       if (error) {
         console.error('Error deducting credit:', error);
